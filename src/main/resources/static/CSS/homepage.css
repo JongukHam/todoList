@@ -1,0 +1,11 @@
+.wrapper {
+  display: grid;
+  place-items: center;
+  min-height: 58vh;
+}
+
+.loginBox{
+    display : flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO LIST</title>
+</head>
+<body>
+
+<h1>WILL</h1>
+<p th:each=" # : ${}"><input type="checkbox" th:text="${}"></p>
+<h1>DONE</h1>
+
+</body>
+</html>
