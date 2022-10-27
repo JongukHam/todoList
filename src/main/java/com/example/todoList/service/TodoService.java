@@ -33,6 +33,25 @@ public interface TodoService {
         return entity;
     }
 
+    default TodoList dtoToEntityForMod(TodoListDTO dto){
+        Member mem = Member.builder()
+                .userid(dto.getUserid())
+                .build();
+        TodoList entity = TodoList.builder()
+                .tno(dto.getTno())
+                .todo(dto.getTodo())
+                .done(dto.isDone())
+                .member(mem)
+                .build();
+        return entity;
+    }
+
+    // 모든 리스트 불러오기
     List<TodoListDTO> getList();
+    // 할일 쓰기
     void writeTodo(TodoListDTO writeDTO);
+    // 할일 완료로 수정
+    void doneSomething(List<String> dto);
+
+
 }

@@ -31,4 +31,17 @@ public class TodoServiceImpl implements TodoService{
         TodoList realSave = dtoToEntity(writeDTO);
         repository.save(realSave);
     }
+
+    @Override
+    public void doneSomething(List<String> doneList) {
+        for(String done : doneList){
+            Long tno = Long.parseLong(done);
+            Optional<TodoList> bfTodo= repository.findById(tno);
+            if(bfTodo.isPresent()){
+                TodoListDTO afTodo= entityToDto(bfTodo.get());
+                afTodo.setDone(!afTodo.isDone());
+                repository.save(dtoToEntityForMod(afTodo));
+            }
+        }
+    }
 }

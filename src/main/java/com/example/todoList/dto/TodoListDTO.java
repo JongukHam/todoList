@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -19,4 +20,5 @@ public class TodoListDTO {
     private LocalDateTime regDate,comDate;
     private String userid;
 
+    private List<Boolean> checked;
 }
