@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,10 +24,10 @@ public class TodoServiceTests {
     }
 
     @Test
-    public void 저장(){
+    public void putDummies(){
         IntStream.rangeClosed(1,10).forEach(i->{
             TodoListDTO dto = TodoListDTO.builder()
-                    .userid("admin")
+                    .userid("Member"+i)
                     .todo("할거 ="+i)
                     .build();
             todoService.writeTodo(dto);

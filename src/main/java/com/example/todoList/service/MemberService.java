@@ -26,5 +26,6 @@ public interface MemberService {
 
     String login(MemberDTO dto);
 
+    void signup(MemberDTO dto);
 
 }

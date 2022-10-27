@@ -35,4 +35,13 @@ public class MemberServiceImpl implements MemberService{
         }
         return "로그인 실패";
     }
+
+    @Override
+    public void signup(MemberDTO dto) {
+        Optional<Member> searchMember = repository.findByUserid(dto.getUserid());
+        if(!searchMember.isPresent()){
+            Member entity = dtoToEntity(dto); //받은 회원 정보
+            repository.save(entity);
+        }
+    }
 }
