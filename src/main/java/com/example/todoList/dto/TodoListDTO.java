@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class TodoListDTO {
 
@@ -18,7 +16,6 @@ public class TodoListDTO {
     private boolean done;
     private String todo;
     private LocalDateTime regDate,comDate;
-    private String userid;
+    private String writer;
 
-    private List<Boolean> checked;
 }

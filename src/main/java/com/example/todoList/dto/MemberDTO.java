@@ -1,20 +1,19 @@
 package com.example.todoList.dto;
 
-import lombok.AllArgsConstructor;
+import com.example.todoList.entity.TodoList;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class MemberDTO {
 
-    private String userid;
+    private String userId;
     private String password;
+    private String auth;
     private LocalDateTime regDate,comDate;
-
+    private List<TodoListDTO> todoList;
 }

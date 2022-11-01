@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>SignUpPage</title>
+</head>
+<body>
+<h1>SignUp Page</h1>
+<div>
+<!--    왜인지는 모르겠지만 th:action으로 해야만 dto에 올바르게 전달됨-->
+    <form method="post" th:action="@{/member/signup}">
+        <p>ID : <input name="userId" type="text"></p>
+        <p>PASSWORD : <input name="password" type="text"></p>
+        <p><input type="radio" name="auth" value="ROLE_ADMIN,ROLE_USER"> admin
+            <input type="radio" name="auth" value="ROLE_USER" checked="checked"> user
+        </p>
+        <p><input type="submit" value="SIGN_UP"></p>
+    </form>
+</div>
+</body>
+</html>

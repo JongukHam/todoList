@@ -9,49 +9,18 @@ import java.util.List;
 
 public interface TodoService {
 
-    default TodoListDTO entityToDto(TodoList entity){
-        TodoListDTO dto = TodoListDTO.builder()
-                .tno(entity.getTno())
-                .done(entity.isDone())
-                .todo(entity.getTodo())
-                .regDate(entity.getRegDate())
-                .comDate(entity.getComDate())
-                .userid(entity.getMember().getUserid())
-                .build();
-        return dto;
-    }
-
+    // form에서 입력받은 dto를 posting(할일 등록) 할 때 저장할 entity로 변환
     default TodoList dtoToEntity(TodoListDTO dto){
-        Member mem = Member.builder()
-                .userid(dto.getUserid())
-                .build();
+        Member member = Member.builder().userId(dto.getWriter()).build();
         TodoList entity = TodoList.builder()
                 .todo(dto.getTodo())
-                .done(dto.isDone())
-                .member(mem)
+                .writer(member)
                 .build();
         return entity;
     }
 
-    default TodoList dtoToEntityForMod(TodoListDTO dto){
-        Member mem = Member.builder()
-                .userid(dto.getUserid())
-                .build();
-        TodoList entity = TodoList.builder()
-                .tno(dto.getTno())
-                .todo(dto.getTodo())
-                .done(dto.isDone())
-                .member(mem)
-                .build();
-        return entity;
-    }
+    void posting(TodoListDTO dto);
 
-    // 모든 리스트 불러오기
-    List<TodoListDTO> getList();
-    // 할일 쓰기
-    void writeTodo(TodoListDTO writeDTO);
-    // 할일 완료로 수정
-    void doneSomething(List<String> dto);
-
+    void completeTodo(List<String> completedThings);
 
 }

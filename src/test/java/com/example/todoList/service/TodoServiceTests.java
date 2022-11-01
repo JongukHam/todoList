@@ -4,35 +4,44 @@ import com.example.todoList.dto.TodoListDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
-import java.util.stream.IntStream;
+
 
 @SpringBootTest
 public class TodoServiceTests {
 
     @Autowired
     private TodoService todoService;
+    @Autowired
+    private MemberService memberService;
 
     @Test
-    public void list다가져오기(){
-        List<TodoListDTO> result = todoService.getList();
-        result.forEach(i->{
-            System.out.println(i);
-        });
+    @Transactional
+    public void getMyBoard(){
+        List<TodoListDTO> myList = memberService.getMyTodoList("user1");
+        if(myList.isEmpty()){
+            System.out.println("리스트 비어있음");
+        }else{
+            for(TodoListDTO list : myList){
+                System.out.println(list);
+            }
+        }
     }
 
     @Test
-    public void putDummies(){
-        IntStream.rangeClosed(1,10).forEach(i->{
-            TodoListDTO dto = TodoListDTO.builder()
-                    .userid("Member"+i)
-                    .todo("할거 ="+i)
-                    .build();
-            todoService.writeTodo(dto);
-        });
-
+    @Transactional
+    @Rollback(value = false)
+    public void postingTest(){
+        TodoListDTO testDto = TodoListDTO.builder()
+                        .todo("it is for test2")
+                        .writer("user1")
+                        .build();
+        todoService.posting(testDto);
     }
+
+
 
 }

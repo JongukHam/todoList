@@ -7,6 +7,8 @@ import com.example.todoList.service.MemberService;
 import com.example.todoList.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping({"/todo","/"})
 @RequiredArgsConstructor
 @Log4j2
 public class TodoListController {
@@ -23,37 +24,51 @@ public class TodoListController {
     public final MemberService memberService;
     public final TodoService todoService;
 
-    // 로그인 페이지
-    @GetMapping
-    public String welcomePage(){
-        return "homepage";
+//===========================GET===========================
+
+    @GetMapping({"/member/login","/"})
+    public String loginPage(){
+        return "loginPage";
     }
 
-    // 로그인 성공하고 리스트 페이지
-    @GetMapping("/todolist")
-    public String todoListPage(Model model){
-        List<TodoListDTO> allList = todoService.getList();
-        model.addAttribute("allList", allList);
-        return "todolist";
+    @GetMapping("/member/signup")
+    public String signUpPage(){
+        return "signUpPage";
     }
 
-    // 홈에서 로그인 했을 때
-    @PostMapping("/login")
-    public String tryLogin(MemberDTO dto, RedirectAttributes redirectAttributes){
-        String loginState = memberService.login(dto);
-        if(loginState.equals("로그인 성공")){
-            return "redirect:/todo/todolist";
-        }else{
-            redirectAttributes.addAttribute("loginState",loginState);
-            return "redirect:/todo";
-        }
+    @GetMapping("/todo/list")
+    public String todoListPage(Model model, @AuthenticationPrincipal Member loginUser){
+        model.addAttribute("todoList", memberService.getMyTodoList(loginUser.getUserId()));
+        return "todoListPage";
     }
 
-    @PostMapping("/doneSomething")
-    public String doneSomething(@RequestParam List<String> checked){
-            todoService.doneSomething(checked);
-            return "redirect:/todo/todolist";
+    @GetMapping("/denied")
+    public String deniedPage(){
+        return "deniedPage";
     }
 
 
+
+
+//===========================POST===========================
+
+    @PostMapping("/member/signup")
+    public String signup(MemberDTO signUpUserDto){
+        memberService.signup(signUpUserDto);
+        return "redirect:/member/login";
+    }
+
+    @PostMapping("/todo/posting")
+    public String posting(TodoListDTO postingData,@AuthenticationPrincipal Member loginUser){
+        postingData.setWriter(loginUser.getUserId());
+        postingData.setDone(false);
+        todoService.posting(postingData);
+        return "redirect:/todo/list";
+    }
+
+    @PostMapping("/todo/todoDone")
+    public String todoDone(@RequestParam List<String> checked){ // form의 name이 checked인 input이 여러개로 넘어올 때 자동으로 List타입으로 받아짐
+        todoService.completeTodo(checked);
+        return "redirect:/todo/list";
+    }
 }

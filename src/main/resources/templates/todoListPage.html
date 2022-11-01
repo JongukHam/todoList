@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <link rel="stylesheet" type="text/css" href="/CSS/homepage.css">
+    <meta charset="UTF-8">
+    <title>TODO LIST</title>
+</head>
+<body>
+<div class="wrapper">
+<!--    로그아웃-->
+    <div>
+        <form th:action="@{/member/logout}" method="POST" sec:authorize="isAuthenticated()">
+            <sec:csrfInput />
+            <input type="submit" value="LOGOUT"/>
+        </form>
+    </div>
+
+<!--    할일 등록-->
+    <h1>POST HERE</h1>
+    <form method="post" th:action="@{/todo/posting}">
+        <sec:csrfInput />
+        <input type="text" name="todo" placeholder="WRITE SOMETHING TODO">
+        <input type="hidden" value="false" name="done">
+        <input type="submit">
+    </form>
+
+<!--    할일(등록된게 있다면)-->
+    <th:block th:if="${not #strings.isEmpty(todoList)}">
+        <h1>WILL</h1>
+        <form method="post" th:action="@{/todo/todoDone}" id="todoForm">
+            <sec:csrfInput />
+            <th:block th:each="list : ${todoList}">
+                <th:block th:if="${!list.isDone()}">
+                    <div>
+                        <sec:csrfInput />
+                        <input type="checkbox" th:name="checked" th:value="${list.getTno()}" th:checked="${list.isDone()}">
+                        <label type="hidden" th:name="_checked" value="on"/>
+                        <span th:text="${list.getTodo()}"></span>
+                    </div>
+                </th:block>
+            </th:block>
+            <input type="submit" value="submit">
+        </form>
+<!--        완료한 일-->
+        <h1>DONE</h1>
+            <th:block th:each="list : ${todoList}">
+                <th:block th:if="${list.isDone()}">
+                    <div>
+                        <input type="checkbox" th:name="checked" th:value="${list.getTno()}" th:checked="${list.isDone()}" disabled>
+                        <label type="hidden" th:name="_checked" value="on"/>
+                        <span th:text="${list.getTodo()}"></span>
+                    </div>
+                </th:block>
+            </th:block>
+    </th:block>
+
+<!--    등록된게 없다면-->
+    <th:block th:if="${#strings.isEmpty(todoList)}">
+        <h2> TRY WRITE TODO </h2>
+    </th:block>
+
+</div>
+</body>
+</html>

@@ -23,10 +23,10 @@ public class TodoList extends CreateDate{
     @ColumnDefault("false")
     private boolean done;
 
-    @Column(length = 50,nullable = false)
+    @Column(length = 100,nullable = false)
     private String todo;
 
-    @ManyToOne
-    @JoinColumn(name = "userid")
-    private Member member;
+    @ManyToOne(targetEntity = Member.class)
+    @JoinColumn(name = "userId")
+    private Member writer;
 }
